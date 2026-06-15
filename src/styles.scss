@@ -1,1 +1,234 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$orange-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap');
+
+:root {
+  --primary: #ff6b35;
+  --primary-light: #ffa570;
+  --primary-dark: #e8540f;
+  --accent: #ffd166;
+  --accent-2: #845ec2;
+
+  --gradient-primary: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  --gradient-primary-hover: linear-gradient(135deg, #ff8255 0%, #ffaa3e 100%);
+  --gradient-hero: linear-gradient(135deg, #fff8f3 0%, #ffe9d6 45%, #ffd8b8 100%);
+  --gradient-dark: linear-gradient(160deg, #1a1a2e 0%, #16213e 55%, #1f2b4d 100%);
+
+  --surface: #fef9f5;
+  --text-primary: #1a1625;
+  --text-secondary: #6b6478;
+  --border: rgba(255, 107, 53, 0.12);
+  --success: #0f9d6a;
+  --success-bg: #e3f9ef;
+
+  --glass-bg: rgba(255, 255, 255, 0.68);
+  --glass-bg-strong: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-blur: blur(20px);
+  --glass-dark-bg: rgba(255, 255, 255, 0.06);
+  --glass-dark-border: rgba(255, 255, 255, 0.12);
+
+  --shadow-xs: 0 1px 2px rgba(26, 22, 37, 0.04);
+  --shadow-sm: 0 4px 16px rgba(26, 22, 37, 0.06);
+  --shadow-md: 0 12px 32px rgba(26, 22, 37, 0.08);
+  --shadow-lg: 0 24px 64px rgba(255, 107, 53, 0.20);
+  --shadow-glow: 0 0 0 1px rgba(255, 107, 53, 0.10), 0 12px 40px rgba(255, 107, 53, 0.22);
+
+  --radius-sm: 12px;
+  --radius: 20px;
+  --radius-lg: 28px;
+  --radius-full: 999px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-primary);
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+// === Soft gradient mesh background with blurred orbs ===
+.page-wrapper {
+  min-height: 100vh;
+  background: var(--gradient-hero);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.page-wrapper::before,
+.page-wrapper::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  z-index: 0;
+  pointer-events: none;
+}
+.page-wrapper::before {
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, rgba(255,165,112,0.55), transparent 70%);
+  top: -180px; right: -120px;
+}
+.page-wrapper::after {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(255,209,102,0.45), transparent 70%);
+  bottom: -160px; left: -120px;
+}
+
+// === Glassmorphism core ===
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-card,
+.food-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+}
+.glass-card:hover,
+.food-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+// === Navbar (glass) ===
+.navbar {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    span.emoji { -webkit-text-fill-color: initial; font-size: 1.6rem; }
+  }
+
+  .spacer { flex: 1; }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    a { font-size: 0.875rem; font-weight: 600; }
+  }
+
+  .cart-badge {
+    position: relative;
+    .badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: var(--gradient-primary);
+      color: white;
+      border-radius: 50%;
+      width: 19px;
+      height: 19px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(255,107,53,0.5);
+    }
+  }
+}
+
+// === Buttons ===
+.btn-primary {
+  background: var(--gradient-primary) !important;
+  color: white !important;
+  border-radius: var(--radius-full) !important;
+  font-weight: 600 !important;
+  padding: 10px 24px !important;
+  box-shadow: var(--shadow-glow) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+.btn-primary:hover { transform: translateY(-2px); }
+
+// === Status chips ===
+.status-chip {
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+  letter-spacing: 0.02em;
+  &.pending    { background: #fff3e0; color: #e65100; }
+  &.preparing  { background: #e3f2fd; color: #1565c0; }
+  &.ready      { background: var(--success-bg); color: var(--success); }
+  &.completed  { background: #f3e5f5; color: #6a1b9a; }
+  &.cancelled  { background: #fce4ec; color: #c62828; }
+}
+
+.form-field-full { width: 100%; margin-bottom: 8px; }
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px;
+}
+
+.success-snack { background: var(--success) !important; color: white !important; }
+.error-snack   { background: #c62828 !important; color: white !important; }
+
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .app-container { padding: 0 14px; }
+  .page-wrapper::before, .page-wrapper::after { display: none; }
+}
+
+.mat-mdc-card { border-radius: var(--radius) !important; }

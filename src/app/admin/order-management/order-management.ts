@@ -283,16 +283,27 @@ export class OrderManagement implements OnInit {
   ngOnInit() { this.loadOrders(); }
 
   loadOrders() {
-    this.loading.set(true);
-    const { status, date } = this.filterForm.value;
-    const filters: any = {};
-    if (status) filters.status = status;
-    if (date) filters.date = date instanceof Date ? date.toISOString().split('T')[0] : date;
-    this.orderService.getOrders(filters).subscribe({
-      next: orders => { this.orders.set(orders); this.loading.set(false); },
-      error: () => this.loading.set(false)
-    });
-  }
+  this.loading.set(true);
+  const { status, date } = this.filterForm.value;
+  const filters: any = {};
+  if (status) filters.status = status;
+  if (date) filters.date = date instanceof Date ? date.toISOString().split('T')[0] : date;
+
+  console.log('Filter form value:', this.filterForm.value);
+  console.log('Filters being sent:', filters);
+
+  this.orderService.getOrders(filters).subscribe({
+    next: orders => {
+      console.log('Orders returned:', orders.length, orders.map(o => o.order_status));
+      this.orders.set(orders);
+      this.loading.set(false);
+    },
+    error: (e) => {
+      console.error('getOrders error:', e);
+      this.loading.set(false);
+    }
+  });
+}
 
   toggleExpand(id: string) {
     this.expandedId.set(this.expandedId() === id ? null : id);

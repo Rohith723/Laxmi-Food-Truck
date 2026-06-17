@@ -468,10 +468,10 @@ export class Contact implements OnInit {
       this.contactForm.reset();
     },
     error: e => {
-      this.sending.set(false);
-      console.error('Contact form error:', e);
-      this.snackBar.open('Failed to send: ' + (e.message || e.details || 'Unknown error'), '✕', { duration: 5000, panelClass: 'error-snack' });
-    }
+  this.sending.set(false);
+  const fullError = JSON.stringify({ message: e.message, details: e.details, hint: e.hint, code: e.code }, null, 2);
+  this.snackBar.open(fullError, 'Close', { duration: 15000, panelClass: 'error-snack' });
+}
   });
 }
 }

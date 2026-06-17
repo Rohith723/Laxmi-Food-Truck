@@ -68,17 +68,20 @@ import { PickupSlot } from '../../models';
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field-full">
-                  <mat-label>Pickup Time Slot</mat-label>
-                  <mat-select formControlName="pickup_time">
-                    @for (slot of availableSlots(); track slot.slot_time) {
-                      <mat-option [value]="slot.slot_time">{{ slot.slot_time }}</mat-option>
-                    }
-                    @if (availableSlots().length === 0) {
-                      <mat-option disabled>No slots available</mat-option>
-                    }
-                  </mat-select>
-                  <mat-icon matPrefix>schedule</mat-icon>
-                </mat-form-field>
+  <mat-label>Pickup Time Slot</mat-label>
+  <mat-select formControlName="pickup_time">
+    @for (slot of availableSlots(); track slot.slot_time) {
+      <mat-option [value]="slot.slot_time">{{ slot.slot_time }}</mat-option>
+    }
+    @if (availableSlots().length === 0) {
+      <mat-option disabled>No slots left for today</mat-option>
+    }
+  </mat-select>
+  <mat-icon matPrefix>schedule</mat-icon>
+  @if (availableSlots().length === 0) {
+    <mat-hint class="no-slots-hint">All today's slots have passed. Please select tomorrow's date.</mat-hint>
+  }
+</mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field-full">
                   <mat-label>Special Instructions (Optional)</mat-label>
@@ -172,28 +175,91 @@ export class Checkout implements OnInit {
 });
   }
 
- ngOnInit() {
+allSlots = signal<PickupSlot[]>([]);
+
+ngOnInit() {
   this.businessService.getPickupSlots().subscribe({
     next: slots => {
       if (slots.length > 0) {
-        this.availableSlots.set(slots);
+        this.allSlots.set(slots);
       } else {
         this.generateDefaultSlots();
       }
+      this.filterSlotsForDate(this.checkoutForm.get('pickup_date')?.value);
     },
-    error: () => this.generateDefaultSlots()
+    error: () => {
+      this.generateDefaultSlots();
+      this.filterSlotsForDate(this.checkoutForm.get('pickup_date')?.value);
+    }
+  });
+
+  // Re-filter slots whenever the pickup date changes
+  this.checkoutForm.get('pickup_date')?.valueChanges.subscribe(date => {
+    this.filterSlotsForDate(date);
+    // Clear the selected time if it's no longer valid for the new date
+    const currentTime = this.checkoutForm.get('pickup_time')?.value;
+    if (currentTime && !this.availableSlots().some(s => s.slot_time === currentTime)) {
+      this.checkoutForm.patchValue({ pickup_time: '' });
+    }
   });
 }
-  generateDefaultSlots() {
-    const slots: PickupSlot[] = [];
-    for (let h = 19; h < 23; h++) {
-      for (let m = 0; m < 60; m += 15) {
-        const hour12 = h > 12 ? h - 12 : h;
-        slots.push({ slot_time: `${hour12}:${m.toString().padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`, max_orders: 10, is_active: true });
-      }
+
+generateDefaultSlots() {
+  const slots: PickupSlot[] = [];
+  for (let h = 19; h < 23; h++) {
+    for (let m = 0; m < 60; m += 15) {
+      const hour12 = h > 12 ? h - 12 : h;
+      slots.push({ slot_time: `${hour12}:${m.toString().padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`, max_orders: 10, is_active: true });
     }
-    this.availableSlots.set(slots);
   }
+  this.allSlots.set(slots);
+}
+
+private parseSlotTime(slotTime: string): { hour: number; minute: number } {
+  // Parses "7:45 PM" -> { hour: 19, minute: 45 }
+  const match = slotTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  if (!match) return { hour: 0, minute: 0 };
+  let hour = parseInt(match[1], 10);
+  const minute = parseInt(match[2], 10);
+  const period = match[3].toUpperCase();
+  if (period === 'PM' && hour !== 12) hour += 12;
+  if (period === 'AM' && hour === 12) hour = 0;
+  return { hour, minute };
+}
+
+private isToday(date: Date): boolean {
+  const today = new Date();
+  return date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear();
+}
+
+filterSlotsForDate(date: Date | string | null) {
+  const all = this.allSlots();
+  if (!date) {
+    this.availableSlots.set(all);
+    return;
+  }
+
+  const selectedDate = date instanceof Date ? date : new Date(date);
+
+  if (!this.isToday(selectedDate)) {
+    // Future date — show all slots
+    this.availableSlots.set(all);
+    return;
+  }
+
+  // Today — only show slots that haven't passed yet
+  const now = new Date();
+  const filtered = all.filter(slot => {
+    const { hour, minute } = this.parseSlotTime(slot.slot_time);
+    const slotMinutes = hour * 60 + minute;
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+    return slotMinutes > nowMinutes;
+  });
+
+  this.availableSlots.set(filtered);
+}
 
  async placeOrder() {
   if (this.checkoutForm.invalid) { this.checkoutForm.markAllAsTouched(); return; }

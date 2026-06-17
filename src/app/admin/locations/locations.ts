@@ -139,7 +139,7 @@ import { Location } from '../../models';
               <div class="coords-display">
                 <mat-icon>gps_fixed</mat-icon>
                 <span>{{ loc.latitude }}, {{ loc.longitude }}</span>
-                <a [href]="'https://www.google.com/maps?q=' + loc.latitude + ',' + loc.longitude"
+                <a>[href]="'https://www.google.com/maps?q=' + loc.latitude + ',' + loc.longitude"
                   target="_blank" class="view-map-link">
                   <mat-icon>open_in_new</mat-icon>
                 </a>

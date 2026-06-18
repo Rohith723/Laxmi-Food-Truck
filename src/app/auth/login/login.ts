@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../services/auth.service';
-
 @Component({
   selector: 'app-login',
   imports: [RouterLink, ReactiveFormsModule, MatButtonModule, MatIconModule,
@@ -18,7 +17,7 @@ import { AuthService } from '../../services/auth.service';
         <div class="login-header">
           <div class="logo-icon">🚚</div>
           <h1>Admin Login</h1>
-          <p>Laxmi Food Truck Management Portal</p>
+          <p>Saidulu Snacks Kitchen Management Portal</p>
         </div>
 
         <form [formGroup]="loginForm" (ngSubmit)="login()">

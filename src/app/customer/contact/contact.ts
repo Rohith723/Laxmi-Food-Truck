@@ -7,10 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-// import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Navbar } from '../../shared/navbar/navbar';
 import { LocationService } from '../../services/location.service';
-import { Location } from '../../models';
 
 @Component({
   selector: 'app-contact',
@@ -25,74 +23,6 @@ import { Location } from '../../models';
           <h1>Find Us 📍</h1>
           <p>We move around the city — here's where to find us and how to reach us.</p>
         </div>
-
-        // <!-- Locations Section -->
-        // <section class="locations-section">
-        //   <h2 class="section-title">Our Locations</h2>
-
-        //   @if (loading()) {
-        //     <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
-        //   } @else if (locations().length === 0) {
-        //     <div class="empty-locations glass-card">
-        //       <mat-icon>location_off</mat-icon>
-        //       <p>No locations added yet. Check back soon!</p>
-        //     </div>
-        //   } @else {
-        //     <div class="locations-grid">
-        //       @for (loc of locations(); track loc.id) {
-        //         <div class="location-card glass-card" [class.selected]="selectedLocation()?.id === loc.id"
-        //           (click)="selectLocation(loc)">
-        //           <div class="location-header">
-        //             <div class="location-icon">📍</div>
-        //             <div>
-        //               <h3>{{ loc.name }}</h3>
-        //               <p class="address">{{ loc.address }}</p>
-        //             </div>
-        //             @if (selectedLocation()?.id === loc.id) {
-        //               <mat-icon class="selected-icon">check_circle</mat-icon>
-        //             }
-        //           </div>
-        //           @if (loc.schedule) {
-        //             <div class="schedule-badge">
-        //               <mat-icon>schedule</mat-icon>
-        //               <span>{{ loc.schedule }}</span>
-        //             </div>
-        //           }
-        //           <button mat-button class="directions-btn"
-        //             (click)="openDirections(loc); $event.stopPropagation()">
-        //             <mat-icon>directions</mat-icon>
-        //             Get Directions
-        //           </button>
-        //         </div>
-        //       }
-        //     </div>
-
-        //     <!-- Map embed -->
-        //     @if (selectedLocation()) {
-        //       <div class="map-container glass-card">
-        //         <div class="map-header">
-        //           <mat-icon>map</mat-icon>
-        //           <span>{{ selectedLocation()!.name }}</span>
-        //           <small>{{ selectedLocation()!.address }}</small>
-        //         </div>
-        //         <iframe
-        //           [src]="mapUrl()"
-        //           width="100%"
-        //           height="380"
-        //           style="border:0; border-radius: 0 0 20px 20px;"
-        //           allowfullscreen
-        //           loading="lazy"
-        //           referrerpolicy="no-referrer-when-downgrade">
-        //         </iframe>
-        //       </div>
-        //     } @else {
-        //       <div class="map-placeholder glass-card">
-        //         <mat-icon>touch_app</mat-icon>
-        //         <p>Click a location above to view it on the map</p>
-        //       </div>
-        //     }
-        //   }
-        // </section>
 
         <!-- Contact Form Section -->
         <section class="contact-section">
@@ -212,120 +142,6 @@ import { Location } from '../../models';
       p { color: var(--text-secondary); font-size: 1.05rem; }
     }
 
-    // Locations
-    .locations-section { margin-bottom: 64px; }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.6rem;
-      font-weight: 800;
-      margin-bottom: 24px;
-    }
-
-    .locations-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      margin-bottom: 24px;
-    }
-
-    .location-card {
-      padding: 22px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
-
-      &:hover { transform: translateY(-4px); }
-
-      &.selected {
-        border-color: var(--primary);
-        box-shadow: var(--shadow-glow);
-      }
-    }
-
-    .location-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 14px;
-      position: relative;
-
-      .location-icon { font-size: 28px; flex-shrink: 0; }
-
-      h3 { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
-
-      .address { color: var(--text-secondary); font-size: 0.875rem; line-height: 1.5; }
-    }
-
-    .selected-icon {
-      position: absolute;
-      top: 0; right: 0;
-      color: var(--primary);
-    }
-
-    .schedule-badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255,107,53,0.08);
-      color: var(--primary-dark);
-      padding: 6px 12px;
-      border-radius: var(--radius-full);
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 14px;
-      mat-icon { font-size: 16px; width: 16px; height: 16px; }
-    }
-
-    .directions-btn {
-      color: var(--primary) !important;
-      font-weight: 600 !important;
-      padding: 0 !important;
-      display: flex !important;
-      align-items: center !important;
-      gap: 4px !important;
-      mat-icon { font-size: 18px; }
-    }
-
-    .map-container {
-      overflow: hidden;
-      margin-top: 8px;
-    }
-
-    .map-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(255,107,53,0.04);
-
-      mat-icon { color: var(--primary); }
-      span { font-weight: 700; font-size: 1rem; flex: 1; }
-      small { color: var(--text-secondary); font-size: 0.8rem; }
-    }
-
-    .map-placeholder {
-      height: 200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      color: var(--text-secondary);
-      margin-top: 8px;
-
-      mat-icon { font-size: 40px; width: 40px; height: 40px; opacity: 0.4; }
-      p { font-size: 0.9rem; }
-    }
-
-    .empty-locations {
-      padding: 48px;
-      text-align: center;
-      color: var(--text-secondary);
-      mat-icon { font-size: 40px; width: 40px; height: 40px; opacity: 0.3; display: block; margin: 0 auto 12px; }
-    }
-
     // Contact
     .contact-section { margin-bottom: 32px; }
     .contact-layout { display: grid; grid-template-columns: 1fr 1.3fr; gap: 28px; align-items: start; }
@@ -401,15 +217,9 @@ import { Location } from '../../models';
     @media (max-width: 900px) {
       .contact-layout { grid-template-columns: 1fr; }
     }
-    @media (max-width: 600px) {
-      .locations-grid { grid-template-columns: 1fr; }
-    }
   `]
 })
-export class Contact implements OnInit {
-  // locations = signal<Location[]>([]);
-  // selectedLocation = signal<Location | null>(null);
-  // loading = signal(true);
+export class Contact {
   sending = signal(false);
   submitted = signal(false);
   contactForm: FormGroup;
@@ -417,7 +227,6 @@ export class Contact implements OnInit {
   constructor(
     private fb: FormBuilder,
     private locationService: LocationService,
-    private sanitizer: DomSanitizer,
     private snackBar: MatSnackBar
   ) {
     this.contactForm = this.fb.group({
@@ -428,50 +237,23 @@ export class Contact implements OnInit {
     });
   }
 
-  // ngOnInit() {
-  //   this.locationService.getLocations().subscribe({
-  //     next: locs => {
-  //       this.locations.set(locs);
-  //       if (locs.length > 0) this.selectedLocation.set(locs[0]);
-  //       this.loading.set(false);
-  //     },
-  //     error: () => this.loading.set(false)
-  //   });
-  // }
-
-  // selectLocation(loc: Location) {
-  //   this.selectedLocation.set(loc);
-  // }
-
-  // mapUrl(): SafeResourceUrl {
-  //   const loc = this.selectedLocation();
-  //   if (!loc) return this.sanitizer.bypassSecurityTrustResourceUrl('');
-  //   const url = `https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${loc.latitude},${loc.longitude}&zoom=15`;
-  //   return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-  // }
-
-  // openDirections(loc: Location) {
-  //   window.open(`https://www.google.com/maps/dir/?api=1&destination=${loc.latitude},${loc.longitude}`, '_blank');
-  // }
-
   submitMessage() {
-  if (this.contactForm.invalid) {
-    this.contactForm.markAllAsTouched();
-    this.snackBar.open('Please check the form — phone must be 10 digits starting with 6-9.', '✕', { duration: 4000, panelClass: 'error-snack' });
-    return;
+    if (this.contactForm.invalid) {
+      this.contactForm.markAllAsTouched();
+      this.snackBar.open('Please check the form — phone must be 10 digits starting with 6-9.', '✕', { duration: 4000, panelClass: 'error-snack' });
+      return;
+    }
+    this.sending.set(true);
+    this.locationService.sendMessage(this.contactForm.value).subscribe({
+      next: () => {
+        this.sending.set(false);
+        this.submitted.set(true);
+        this.contactForm.reset();
+      },
+      error: e => {
+        this.sending.set(false);
+        this.snackBar.open('Failed to send message. Please try again.', '✕', { duration: 4000, panelClass: 'error-snack' });
+      }
+    });
   }
-  this.sending.set(true);
-  this.locationService.sendMessage(this.contactForm.value).subscribe({
-    next: () => {
-      this.sending.set(false);
-      this.submitted.set(true);
-      this.contactForm.reset();
-    },
-    error: e => {
-  this.sending.set(false);
-  const fullError = JSON.stringify({ message: e.message, details: e.details, hint: e.hint, code: e.code }, null, 2);
-  this.snackBar.open(fullError, 'Close', { duration: 15000, panelClass: 'error-snack' });
-}
-  });
-}
 }

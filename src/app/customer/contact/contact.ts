@@ -26,73 +26,73 @@ import { Location } from '../../models';
           <p>We move around the city — here's where to find us and how to reach us.</p>
         </div>
 
-        <!-- Locations Section -->
-        <section class="locations-section">
-          <h2 class="section-title">Our Locations</h2>
+        // <!-- Locations Section -->
+        // <section class="locations-section">
+        //   <h2 class="section-title">Our Locations</h2>
 
-          @if (loading()) {
-            <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
-          } @else if (locations().length === 0) {
-            <div class="empty-locations glass-card">
-              <mat-icon>location_off</mat-icon>
-              <p>No locations added yet. Check back soon!</p>
-            </div>
-          } @else {
-            <div class="locations-grid">
-              @for (loc of locations(); track loc.id) {
-                <div class="location-card glass-card" [class.selected]="selectedLocation()?.id === loc.id"
-                  (click)="selectLocation(loc)">
-                  <div class="location-header">
-                    <div class="location-icon">📍</div>
-                    <div>
-                      <h3>{{ loc.name }}</h3>
-                      <p class="address">{{ loc.address }}</p>
-                    </div>
-                    @if (selectedLocation()?.id === loc.id) {
-                      <mat-icon class="selected-icon">check_circle</mat-icon>
-                    }
-                  </div>
-                  @if (loc.schedule) {
-                    <div class="schedule-badge">
-                      <mat-icon>schedule</mat-icon>
-                      <span>{{ loc.schedule }}</span>
-                    </div>
-                  }
-                  <button mat-button class="directions-btn"
-                    (click)="openDirections(loc); $event.stopPropagation()">
-                    <mat-icon>directions</mat-icon>
-                    Get Directions
-                  </button>
-                </div>
-              }
-            </div>
+        //   @if (loading()) {
+        //     <div class="loading-container"><mat-spinner diameter="40"></mat-spinner></div>
+        //   } @else if (locations().length === 0) {
+        //     <div class="empty-locations glass-card">
+        //       <mat-icon>location_off</mat-icon>
+        //       <p>No locations added yet. Check back soon!</p>
+        //     </div>
+        //   } @else {
+        //     <div class="locations-grid">
+        //       @for (loc of locations(); track loc.id) {
+        //         <div class="location-card glass-card" [class.selected]="selectedLocation()?.id === loc.id"
+        //           (click)="selectLocation(loc)">
+        //           <div class="location-header">
+        //             <div class="location-icon">📍</div>
+        //             <div>
+        //               <h3>{{ loc.name }}</h3>
+        //               <p class="address">{{ loc.address }}</p>
+        //             </div>
+        //             @if (selectedLocation()?.id === loc.id) {
+        //               <mat-icon class="selected-icon">check_circle</mat-icon>
+        //             }
+        //           </div>
+        //           @if (loc.schedule) {
+        //             <div class="schedule-badge">
+        //               <mat-icon>schedule</mat-icon>
+        //               <span>{{ loc.schedule }}</span>
+        //             </div>
+        //           }
+        //           <button mat-button class="directions-btn"
+        //             (click)="openDirections(loc); $event.stopPropagation()">
+        //             <mat-icon>directions</mat-icon>
+        //             Get Directions
+        //           </button>
+        //         </div>
+        //       }
+        //     </div>
 
-            <!-- Map embed -->
-            @if (selectedLocation()) {
-              <div class="map-container glass-card">
-                <div class="map-header">
-                  <mat-icon>map</mat-icon>
-                  <span>{{ selectedLocation()!.name }}</span>
-                  <small>{{ selectedLocation()!.address }}</small>
-                </div>
-                <iframe
-                  [src]="mapUrl()"
-                  width="100%"
-                  height="380"
-                  style="border:0; border-radius: 0 0 20px 20px;"
-                  allowfullscreen
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-              </div>
-            } @else {
-              <div class="map-placeholder glass-card">
-                <mat-icon>touch_app</mat-icon>
-                <p>Click a location above to view it on the map</p>
-              </div>
-            }
-          }
-        </section>
+        //     <!-- Map embed -->
+        //     @if (selectedLocation()) {
+        //       <div class="map-container glass-card">
+        //         <div class="map-header">
+        //           <mat-icon>map</mat-icon>
+        //           <span>{{ selectedLocation()!.name }}</span>
+        //           <small>{{ selectedLocation()!.address }}</small>
+        //         </div>
+        //         <iframe
+        //           [src]="mapUrl()"
+        //           width="100%"
+        //           height="380"
+        //           style="border:0; border-radius: 0 0 20px 20px;"
+        //           allowfullscreen
+        //           loading="lazy"
+        //           referrerpolicy="no-referrer-when-downgrade">
+        //         </iframe>
+        //       </div>
+        //     } @else {
+        //       <div class="map-placeholder glass-card">
+        //         <mat-icon>touch_app</mat-icon>
+        //         <p>Click a location above to view it on the map</p>
+        //       </div>
+        //     }
+        //   }
+        // </section>
 
         <!-- Contact Form Section -->
         <section class="contact-section">
